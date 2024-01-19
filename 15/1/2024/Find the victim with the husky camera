@@ -675,6 +675,17 @@ def turn_90_left_rescue():
     angle = primeHub.motion_sensor.get_yaw_angle()
     # print('Angulo:', angle)
 
+def Aproximity():
+    ball = huskyLens.getBlocksByID(1)
+    
+    if len(ball) == 1:
+        FollowVictim()
+        motor_pair.stop()
+        primeHub.light_matrix.write('!')
+        wait_for_seconds(0.5)
+        primeHub.light_matrix.off()
+        wait_for_seconds(1)
+
 
 def cuadrado():
     if forward_color.get_green() > 630 and forward_color.get_blue() > 700 and forward_color.get_red() > 620:
@@ -685,14 +696,7 @@ def cuadrado():
         motor_pair.start_tank(15,15)
         start = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), start) <12000:
-            ball = huskyLens.getBlocksByID(1)
-            if len(ball) == 1:
-                FollowVictim()
-                motor_pair.stop()
-                primeHub.light_matrix.write('!')
-                wait_for_seconds(0.5)
-                primeHub.light_matrix.off()
-                wait_for_seconds(1)
+            Aproximity()
 
         motor_pair.stop()
         wait_for_seconds(1)
@@ -705,13 +709,7 @@ def cuadrado():
         motor_pair.start_tank(15,15)
         start = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), start) <8000:
-            ball = huskyLens.getBlocksByID(1)
-            if len(ball) == 1:
-                motor_pair.stop()
-                primeHub.light_matrix.write('!')
-                wait_for_seconds(0.5)
-                primeHub.light_matrix.off()
-                wait_for_seconds(1)
+            Aproximity()
         motor_pair.stop()
         motor_pair.start_tank(0,0)
         wait_for_seconds(1)
@@ -724,13 +722,7 @@ def cuadrado():
         motor_pair.start_tank(15,15)
         start = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), start) <5000:
-            ball = huskyLens.getBlocksByID(1)
-            if len(ball) == 1:
-                motor_pair.stop()
-                primeHub.light_matrix.write('!')
-                wait_for_seconds(0.5)
-                primeHub.light_matrix.off()
-                wait_for_seconds(1)
+            Aproximity()
         motor_pair.stop()
         motor_pair.start_tank(0,0)
         wait_for_seconds(1)
@@ -743,13 +735,7 @@ def cuadrado():
         motor_pair.start_tank(15,15)
         start = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), start) <8000:
-            ball = huskyLens.getBlocksByID(1)
-            if len(ball) == 1:
-                motor_pair.stop()
-                primeHub.light_matrix.write('!')
-                wait_for_seconds(0.5)
-                primeHub.light_matrix.off()
-                wait_for_seconds(1)
+            Aproximity()
         motor_pair.stop()
 
         motor_pair.start_tank(0,0)
@@ -795,6 +781,7 @@ def FollowVictim():
                 else:   
                    motor_pair.move_tank(0.5, "cm", left_speed=-15, right_speed= -15)       
                 if h_height > 92:
+                        motor_pair.move_tank(7 , "cm", left_speed = 15, right_speed= 15)
                         motor_pair.stop()
                         primeHub.light_matrix.write('!')
                         wait_for_seconds(10)
