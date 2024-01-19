@@ -29,13 +29,12 @@ left_engine= Motor('C')
 motor_pair = MotorPair('C', 'A')
 motor_pair.set_motor_rotation(3.2 * math.pi,'cm')
 
-
-# # color sensor
+# color sensor
 left_color = ColorSensor("F")
 forward_color = ColorSensor("D")
 right_color = ColorSensor("B")
 
-#luces y sonido
+#the lights and sounds of the hub
 proof= False
 #valores
 basic_blak_color=26
@@ -483,7 +482,7 @@ def update():
     ligth_f = forward_color.get_reflected_light()
     ligth_r = right_color.get_reflected_light()
 
-def doubleblack():
+def doubleblack():                                                                                        #intersections where there is a cross or x and you have to skip
     if right_color.get_reflected_light() < double_blck and left_color.get_reflected_light() < double_blck :
         motor_pair.stop()
         if proof == True:
@@ -499,8 +498,8 @@ def doubleblack():
             motor_pair.move_tank(100,'degrees',left_speed=60, right_speed=60)
         else:
             motor_pair.move_tank(-16,'degrees',left_speed=60, right_speed=60)
-def green():
-    if right_color.get_color() =='green':
+def green():                                                             #everything that detects as green
+    if right_color.get_color() =='green': # Ask about one side and then the other to find out if it is not double green
         motor_pair.stop()
         right_engine.run_for_degrees(4)
         if left_color.get_color()== 'green':
@@ -518,9 +517,9 @@ def green():
             turn_90_right()
             motor_pair.move_tank(80,'degrees',left_speed=60, right_speed=60)
             look_left_line()
-    if left_color.get_color() =='green':
+    if left_color.get_color() =='green':  # Ask about one side and then the other to find out if it is not double green
         motor_pair.stop()
-        left_engine.run_for_degrees(3)
+        left_engine.run_for_degrees(4)
         if right_color.get_color() == 'green':
             if proof == True :
                 primeHub.light_matrix.show_image('ARROW_S')
@@ -535,15 +534,15 @@ def green():
             motor_pair.move_tank(180,'degrees',left_speed=60, right_speed=60)
             turn_90_left()
             motor_pair.move_tank(80,'degrees',left_speed=60, right_speed=60)
-            look_left_line()
-def right_intersection():
+            look_rigth_line()
+def right_intersection():   #T-type intersections where it is detected on one side and the middle
     if right_color.get_reflected_light() < side_black_color and forward_color.get_reflected_light() < black_color_front:
         motor_pair.start_tank(0,0)
         if proof == True :
             primeHub.light_matrix.write('Td')
             wait_for_seconds(1)
             primeHub.light_matrix.off()
-        motor_pair.move_tank(3,'degrees',left_speed=30, right_speed=30)
+        motor_pair.move_tank(3,'degrees',left_speed=40, right_speed=40)
         if right_color.get_reflected_light() < side_black_color and forward_color.get_reflected_light() < black_color_front:
             if proof == True :
                 if proof == True :
@@ -557,15 +556,15 @@ def right_intersection():
                 wait_for_seconds(1)
                 primeHub.light_matrix.off()
             motor_pair.move_tank(-15,'degrees',left_speed=60, right_speed=60)
-def left_intersection():
-    if left_color.get_reflected_light() < 32 and forward_color.get_reflected_light() < 32:
+def left_intersection():   #T-type intersections where it is detected on one side and the middle
+    if left_color.get_reflected_light() <  side_black_color and forward_color.get_reflected_light() < black_color_front:
         motor_pair.start_tank(0,0)
         if proof == True :
             primeHub.light_matrix.write('Ti')
             wait_for_seconds(0.5)
             primeHub.light_matrix.off()
         motor_pair.move_tank(3,'degrees',left_speed=30, right_speed=30)
-        if left_color.get_reflected_light() < 32 and forward_color.get_reflected_light() < 32:
+        if left_color.get_reflected_light() < side_black_color and forward_color.get_reflected_light() < black_color_front:
             if proof == True :
                 primeHub.light_matrix.show_image('YES')
                 wait_for_seconds(1)
@@ -577,7 +576,7 @@ def left_intersection():
                 wait_for_seconds(1)
                 primeHub.light_matrix.off()
             motor_pair.move_tank(-15,'degrees',left_speed=60, right_speed=60)
-def look_rigth_line():
+def look_rigth_line():     #to find the line after making a 90 or 180 degree turn
     motor_pair.stop()
     wait_for_seconds(1)
     primeHub.motion_sensor.reset_yaw_angle()
@@ -593,7 +592,7 @@ def look_rigth_line():
     motor_pair.stop()
     angle = primeHub.motion_sensor.get_yaw_angle()
 
-def look_left_line():
+def look_left_line():    #to find the line after making a 90 or 180 degree turn
     motor_pair.stop()
     wait_for_seconds(1)
     primeHub.motion_sensor.reset_yaw_angle()
@@ -647,7 +646,7 @@ def turn_180_left():
     turn_90_right()
     motor_pair.move_tank(0.7,'cm',-30,30)
 
-def turn_90_rigth_rescue():
+def turn_90_rigth_rescue(): #90 degree turns but for the rescue zone
     motor_pair.start_tank(0,0)
     wait_for_seconds(1)
     primeHub.motion_sensor.reset_yaw_angle()
@@ -661,7 +660,7 @@ def turn_90_rigth_rescue():
     angle = primeHub.motion_sensor.get_yaw_angle()
     # print('Angulo:', angle)
 
-def turn_90_left_rescue():
+def turn_90_left_rescue():  #90 degree turns but for the rescue zone
     motor_pair.start_tank(0,0)
     wait_for_seconds(1)
     primeHub.motion_sensor.reset_yaw_angle()
@@ -677,7 +676,7 @@ def turn_90_left_rescue():
 
 def Aproximity():
     ball = huskyLens.getBlocksByID(1)
-    
+
     if len(ball) == 1:
         FollowVictim()
         motor_pair.stop()
@@ -685,8 +684,6 @@ def Aproximity():
         wait_for_seconds(0.5)
         primeHub.light_matrix.off()
         wait_for_seconds(1)
-
-
 def cuadrado():
     if forward_color.get_green() > 630 and forward_color.get_blue() > 700 and forward_color.get_red() > 620:
         motor_pair.stop()
@@ -697,55 +694,22 @@ def cuadrado():
         start = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), start) <12000:
             Aproximity()
-
-        motor_pair.stop()
-        wait_for_seconds(1)
-        primeHub.motion_sensor.reset_yaw_angle()
-        motor_pair.start_tank(30,-30)
-        while (primeHub.motion_sensor.get_yaw_angle() <85):
-            print(primeHub.motion_sensor.get_yaw_angle())
-        motor_pair.start_tank(0,0)
-        angle = primeHub.motion_sensor.get_yaw_angle()
+        turn_90_rigth_rescue()
         motor_pair.start_tank(15,15)
         start = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), start) <8000:
             Aproximity()
-        motor_pair.stop()
-        motor_pair.start_tank(0,0)
-        wait_for_seconds(1)
-        primeHub.motion_sensor.reset_yaw_angle()
-        motor_pair.start_tank(30,-30)
-        while (primeHub.motion_sensor.get_yaw_angle() <85):
-            print(primeHub.motion_sensor.get_yaw_angle())
-        motor_pair.start_tank(0,0)
-        angle = primeHub.motion_sensor.get_yaw_angle()
+       turn_90_rigth_rescue()
         motor_pair.start_tank(15,15)
         start = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), start) <5000:
             Aproximity()
-        motor_pair.stop()
-        motor_pair.start_tank(0,0)
-        wait_for_seconds(1)
-        primeHub.motion_sensor.reset_yaw_angle()
-        motor_pair.start_tank(30,-30)
-        while (primeHub.motion_sensor.get_yaw_angle() <85):
-            print(primeHub.motion_sensor.get_yaw_angle())
-        motor_pair.start_tank(0,0)
-        angle = primeHub.motion_sensor.get_yaw_angle()
+        turn_90_rigth_rescue()
         motor_pair.start_tank(15,15)
         start = time.ticks_ms()
         while time.ticks_diff(time.ticks_ms(), start) <8000:
             Aproximity()
-        motor_pair.stop()
-
-        motor_pair.start_tank(0,0)
-        wait_for_seconds(1)
-        primeHub.motion_sensor.reset_yaw_angle()
-        motor_pair.start_tank(30,-30)
-        while (primeHub.motion_sensor.get_yaw_angle() <85):
-            print(primeHub.motion_sensor.get_yaw_angle())
-        motor_pair.start_tank(0,0)
-        angle = primeHub.motion_sensor.get_yaw_angle()
+        turn_90_rigth_rescue()
 
 
 
@@ -766,27 +730,27 @@ def FollowVictim():
                 print("Derecha")
             elif x_position > 170:# Si el objeto está a la derecha del eje X
                 # motor_pair.move(0.5, "cm", steering=-100)
-                print("Izquierda")  
+                print("Izquierda")
                 motor_pair.move_tank(0.5, "cm", left_speed=15, right_speed=0)
             else:
                 if x_position > 150 and x_position < 170:
-                   if x_position > 160:
-                      motor_pair.start(10, 5)
-                   else: 
-                      if x_position < 160:
-                         motor_pair.start(5, 10)
-                      else:
-                         motor_pair.start(10, 10)
-                   print(h_height,"H", x_position, "X")
-                else:   
-                   motor_pair.move_tank(0.5, "cm", left_speed=-15, right_speed= -15)       
+                if x_position > 160:
+                    motor_pair.start(10, 5)
+                else:
+                    if x_position < 160:
+                        motor_pair.start(5, 10)
+                    else:
+                        motor_pair.start(10, 10)
+                print(h_height,"H", x_position, "X")
+                else:
+                motor_pair.move_tank(0.5, "cm", left_speed=-15, right_speed= -15)
                 if h_height > 92:
-                        motor_pair.move_tank(7 , "cm", left_speed = 15, right_speed= 15)
-                        motor_pair.stop()
-                        primeHub.light_matrix.write('!')
-                        wait_for_seconds(10)
-                        primeHub.light_matrix.off()
-                        wait_for_seconds(1)
+                    motor_pair.move_tank(7 , "cm", left_speed = 15, right_speed= 15)
+                    motor_pair.stop()
+                    primeHub.light_matrix.write('!')
+                    wait_for_seconds(10)
+                    primeHub.light_matrix.off()
+                    wait_for_seconds(1)
         else:
             display.show_image("GHOST")
             motor_pair.move_tank(1, "cm", left_speed=-15, right_speed= -15)
@@ -827,8 +791,7 @@ else:
     display.show_image("SAD")
 
 
-
-    #########################################################################################################################################################################################
+#########################################################################################################################################################################################
 #################################################################################### MAIN CODE ##########################################################################################
 #########################################################################################################################################################################################
 
@@ -884,7 +847,7 @@ while True:
     #    #print(error, derivada, integral, salida, velocidad + salida, velocidad - salida, dt)
     #    motor_pair.start_tank(velocidad + salida,velocidad - salida)
     # else:
-    if left_color.get_reflected_light() > basic_blak_color:
+    if left_color.get_reflected_light() > basic_blak_color:   #follows the line asked if it detects black it goes backwards but forwards
         right_engine.start_at_power(30)
     else:
         right_engine.start_at_power(-50)
@@ -896,7 +859,7 @@ while True:
     if light_l < 30 or ligth_r < 30 or ligth_f < 40 :
         timer.reset()
 
-    if timer.now() > 2.5:
+    if timer.now() > 2.5:    #The counter resets every time it finds black, but if it does not find it, it is to recover the line if it is lost.
         motor_pair.stop()
         motor_pair.start_tank(-30,-30)
         while (left_color.get_reflected_light() > 30 and right_color.get_reflected_light() > 30 and forward_color.get_reflected_light() > 40):
