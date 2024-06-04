@@ -1,3 +1,19 @@
+/* 
+  Diego M. Salinas Fernandez
+  19/05/24 (ES) | 05/19/24 (EN) 
+  This code has already been tested.
+
+--------------------------------------------------------
+NEW VERSION 
+- Not tested yet
++ U variables
+- The code is only functionable with white ball.
+
+Tell me to issues if there is a problem with the new code.
+-------------------------------------------------------- 
+*/
+
+
 #include "Adafruit_APDS9960.h"
 #include <Servo.h>
 
@@ -99,7 +115,6 @@ void claws() {
 }
 
 void deposit_up_selector(uint16_t r, uint16_t g, uint16_t b) {
-    // Add your code here to deposit the ball based on its type
     if (type == 1) {
         //Verificación si hay una pelota Blanca Medir Color
         if(r <= 600 && g <= 600 && b >= 600) {
