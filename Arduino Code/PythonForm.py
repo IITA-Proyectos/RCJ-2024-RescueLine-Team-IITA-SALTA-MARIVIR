@@ -106,17 +106,17 @@ void deposit_up_selector(uint16_t r, uint16_t g, uint16_t b) {
             return;
         } else {
             digitalWrite(1, LOW);   
-            // Elegir al lado que deberia ir
+            // Select the correct side
             selector_servo.write(100);
             
             // deposit_servo.write(160);
 
             
             delay(1000);
-            // Moviento para subir
+            // Up movement
             lift_servo.write(150);
             
-            //Soltar a la pelota
+            // put away the ball
             delay(2000);
             
             right_claw.write(140);
@@ -124,11 +124,11 @@ void deposit_up_selector(uint16_t r, uint16_t g, uint16_t b) {
 
             // selector_servo.write(160); // a low pushment for the ball.
 
-            // Movimiento para bajar a su posición normal   
+            // Claws goes to normal position
             delay(1000);
             lift_servo.write(50);
 
-            // Abrir garras
+            // Open Claws
             delay(1000);
             right_claw.write(160);
             left_claw.write(100);
