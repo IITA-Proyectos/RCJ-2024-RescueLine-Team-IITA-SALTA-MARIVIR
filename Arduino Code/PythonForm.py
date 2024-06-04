@@ -99,7 +99,6 @@ void claws() {
 }
 
 void deposit_up_selector(uint16_t r, uint16_t g, uint16_t b) {
-    // Add your code here to deposit the ball based on its type
     if (type == 1) {
         //Verificación si hay una pelota Blanca Medir Color
         if(r <= 600 && g <= 600 && b >= 600) {
