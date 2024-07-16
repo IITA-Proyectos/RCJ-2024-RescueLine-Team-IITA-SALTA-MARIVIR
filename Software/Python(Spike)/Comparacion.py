@@ -88,51 +88,51 @@ def update_arduino():
                 if rgb_red_a_data  is not None:
                     rgb_red_a= str(rgb_red_a_data[0]) # to extract the right value
                     primeHub.speaker.beep(50, 1)
-                    try:
-                        if int(rgb_red_a_data) < 10:
-                            primeHub.speaker.beep(90, 0.1)
-                    except:
-                        pass
+                    # try:
+                    #     if int(rgb_red_a_data) < 10:
+                    #         primeHub.speaker.beep(90, 0.1)
+                    # except:
+                    #     pass
             if received_data == b'\xfc': # Esto es el 252
                 rgb_green_a = connection.read(1)
                 if rgb_green_a_data is not None:
                     rgb_green_a= str(rgb_green_a_data[0]) # to extract the right value
                     primeHub.speaker.beep(50,1)
-                    try:
-                        if int(rgb_green_a_data) < 10:
-                            primeHub.speaker.beep(90, 0.1)
-                    except:
-                        pass
+                    # try:
+                    #     if int(rgb_green_a_data) < 10:
+                    #         primeHub.speaker.beep(90, 0.1)
+                    # except:
+                    #     pass
             if received_data == b'\xfb': # Esto es el 251
                 rgb_blue_a = connection.read(1)
                 if rgb_blue_a_data is not None:
                     rgb_blue_a= str(rgb_blue_a_data[0]) # to extract the right value
                     primeHub.speaker.beep(50,1)
-                    try:
-                        if int(rgb_blue_a_data) < 10:
-                            primeHub.speaker.beep(90, 0.1)
-                    except:
-                        pass
+                    # try:
+                    #     if int(rgb_blue_a_data) < 10:
+                    #         primeHub.speaker.beep(90, 0.1)
+                    # except:
+                    #     pass
             if received_data == b'\xfa': # Esto es el 250 << Lo que sigue es --> sensor_ultrasonido_izquierda >>
                 distancia_izquierda_data = connection.read(1)
                 if distancia_izquierda_data is not None:
                     distancia_izquierda = str(distancia_izquierda_data[0]) # to extract the right value
                     primeHub.speaker.beep(50, 1)
-                    try:
-                        if int(distancia_izquierda) < 10:
-                            primeHub.speaker.beep(90, 5)
-                    except:
-                        pass
+                    # try:
+                    #     if int(distancia_izquierda) < 10:
+                    #         primeHub.speaker.beep(90, 5)
+                    # except:
+                    #     pass
             if received_data == b'\xf9': # Esto es el 249 << Lo que sigue es --> sensor_ultrasonido_derecha >>
                 sensor_derecha_data = connection.read(1)
                 if sensor_derecha_data is not None:
                     distancia_derecha = str(sensor_derecha_data[0]) # to extract the right value
                     primeHub.speaker.beep(50,1)
-                    try:
-                        if int(distancia_derecha) < 10:
-                            primeHub.speaker.beep(90, 5)
-                    except:
-                        pass
+                    # try:
+                    #     if int(distancia_derecha) < 10:
+                    #         primeHub.speaker.beep(90, 5)
+                    # except:
+                    #     pass
             if received_data == b'\xf8': # Esto es el 248 << Lo que sigue es --> sensor_ultrasonido_frente >>
                 distancia_frente_data = connection.read(1)
                 if distancia_frente_data is not None:
@@ -727,7 +727,7 @@ def motor_pair_move_tank_update(cantidad,tipo,velocidad_izquierda,velocidad_dere
     motor_pair.start_tank(velocidad_izquierda,velocidad_derecha)
     while (abs(right_engine.get_degrees_counted()) < cantidad and not parar ):
         update()
-        #update_arduino()
+        update_arduino()
     motor_pair.stop()
 
 
@@ -868,7 +868,7 @@ def turn_45_rigth_rescue():
     angle = primeHub.motion_sensor.get_yaw_angle()
 
 def turn_45_left_rescue(): # Revisar
-    motor_pair.start_tank(0,0)
+    motor_pair.stop()
     non_blocking_wait(1)
     primeHub.motion_sensor.reset_yaw_angle()
     motor_pair.start_tank(30, -10)
@@ -881,7 +881,7 @@ def turn_45_left_rescue(): # Revisar
     angle = primeHub.motion_sensor.get_yaw_angle()
 
 def turn_180_rescue_rigth():
-    connection.write("<<M>>>")
+    #connection.write("<<M>>>")
     motor_pair_move_tank_update_rescate(99,"degrees",20,80)
     #motor_pair.stop()
     #right_engine.set_degrees_counted(int(0))
@@ -903,7 +903,7 @@ def turn_180_rescue_rigth():
     # motor_pair.stop()
 
 def turn_180_rescue_left():
-    connection.write("<<M>>>")
+    #connection.write("<<M>>>")
     motor_pair_move_tank_update_rescate(99,"degrees",80,20)
     # motor_pair.stop()
     # right_engine.set_degrees_counted(int(0))
@@ -952,8 +952,11 @@ def Aproximity():
 
 
 def cuadrado_izquierdo():
-    motor_pair_move_tank_update_rescate(1000,'degrees',30,80)
+    motor_pair_move_tank_update_rescate(700,'degrees',80,80)
     primeHub.speaker.beep(99, 1)
+    motor_pair_move_tank_update_rescate(200,"degrees",80,20)
+
+
 
     #--------------- Segundo giro de prueba ---------------------------
     #motor_pair_move_tank_update(100, "degrees", 70, 30)
@@ -969,8 +972,9 @@ def cuadrado_izquierdo():
     # primeHub.speaker.beep(90, 1)
 
 def cuadrado_derecho():
-    motor_pair_move_tank_update_rescate(1000,'degrees',80,30)
+    motor_pair_move_tank_update_rescate(700,'degrees',80,80)
     primeHub.speaker.beep(99, 1)
+    motor_pair_move_tank_update_rescate(200,"degrees",20,80)
    
 
     #--------------- Segundo giro de prueba ---------------------------
@@ -1008,7 +1012,7 @@ def rescate():
     motor_pair.stop()
     motor_pair_move_tank_update(200, "degrees", 95,95)  
     motor_pair.stop()
-    non_blocking_wait(1)
+    non_blocking_wait(3)
     pared()
 
 def FollowVictim():
@@ -1023,12 +1027,12 @@ def FollowVictim():
             h_height = vivo[0].height
             if x_position < 150:# Si el objeto está a la izquierda del eje X
                 # motor_pair.move(1, "cm", steering=100)
-                motor_pair.move_tank(0.5, "cm", left_speed=0, right_speed=15)
+                motor_pair_move_tank_update(15, "degrees",0,15)
 
             elif x_position > 180:# Si el objeto está a la derecha del eje X
                 # motor_pair.move(0.5, "cm", steering=-100)
 
-                motor_pair.move_tank(0.5, "cm", left_speed=15, right_speed=0)
+                motor_pair_move_tank_update(15, "degree",15,0)
             else:
                 if x_position > 170 and x_position < 180:
                     if x_position > 170:
@@ -1039,30 +1043,29 @@ def FollowVictim():
                         else:
                             motor_pair.start(40, 40)
                 else:
-                    motor_pair.move_tank(0.5, "cm", left_speed=-15, right_speed= -15)
+                    motor_pair_move_tank_update(15, "degrees",-15,-15)
                     if h_height > 65:
-                        motor_pair.move_tank(3 , "cm", left_speed = 15, right_speed= 15)
+                        motor_pair_move_tank_update(200,"degrees",15,15)
                         motor_pair.stop()
                         non_blocking_wait(1)
                         connection.write("<<A>>")
                         non_blocking_wait(7)
-
-                        #connection.write("<<D>>")
-                        # if 105 <=int(rgb_red_a) <= 110 and 48<=int(rgb_blue_a) <=52 and 44<= int(rgb_green_a)<= 48:# plateado
-                        #    connection.write("<<D>>")
-                        #    non_blocking_wait(5)
-                        #    victima_viva=victima_viva+1
-                        #    depositar()
-                        # elif 105<=int(rgb_red_a)<= 110 and 48<=int(rgb_blue_a)<=52 and 44<= int(rgb_green_a)<= 48:# negro
-                        #    connection.write("<<E>>")
-                        #    non_blocking_wait(5)
-                        #    victima_muerta=1
-                        #    depositar()
-                        # else:
-                            # mayor_ultrasonido()
+                        if 105 <=int(rgb_red_a) <= 110 and 48<=int(rgb_blue_a) <=52 and 44<= int(rgb_green_a)<= 48:# plateado
+                            connection.write("<<D>>")
+                            non_blocking_wait(5)
+                            victima_viva +=1
+                            depositar()
+                        elif 105<=int(rgb_red_a)<= 110 and 48<=int(rgb_blue_a)<=52 and 44<= int(rgb_green_a)<= 48:# negro
+                            connection.write("<<E>>")
+                            non_blocking_wait(5)
+                            victima_muerta=1
+                            #depositar()
+                        else:
+                            pared()
+                            #mayor_ultrasonido()
         else:
             #motor_pair.move_tank(1, "cm", left_speed=15, right_speed= 15)
-            turn_180_rescue_left()
+            pared()
 def depositar():
     if victima_viva >=1:
         motor_pair.start(80,80)
